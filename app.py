@@ -19,16 +19,20 @@ stemmer = SnowballStemmer("english")
 stop_words = set(stopwords.words("english"))
 
 # ✅ Define text_preprocessor manually instead of loading from pickle
-def text_preprocessor(text):
-    # Remove special characters
-    text = re.sub(r"[^a-zA-Z0-9\s]|[^\w\s@#\$%\&\*\-]", " ", text)
+def text_preprocessor(mail):
+    # Removes mentioned person
+    mail = re.sub(r'@\w+', '', mail)
+    # Remove URLs
+    mail = re.sub(r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', '', mail)
     # Convert to lowercase
-    text = text.lower()
-    # Tokenize
-    words = word_tokenize(text)
-    # Remove stopwords and apply stemming
-    words = [stemmer.stem(word) for word in words if word not in stop_words]
-    return " ".join(words)
+    mail = mail.lower() 
+    # Remove special characters
+    mail = re.sub(r"[^a-zA-Z0-9\s]", '', mail)
+    # Split into words, remove stop words, and stem
+    words = [stemmer.stem(word) for word in mail.split() if word not in stop_words] 
+    # Join words back into a single string (correct this part)
+    mail = ' '.join(words)
+    return mail
 
 # ✅ Load Vectorizer and Model (No loading of preprocessor from pickle)
 @st.cache_resource

@@ -31,12 +31,12 @@ def text_preprocessor(text):
     return " ".join(words)
 
 # ✅ Load Vectorizer and Model (No loading of preprocessor from pickle)
-@st.cache_data
+@st.cache_resource
 def load_vectorizer():
     with open('Artifacts/vectorizer.pkl', 'rb') as f:  
         return pickle.load(f)
 
-@st.cache_data
+@st.cache_resource
 def load_model():
     with open('Artifacts\Logistic Regression.pkl', 'rb') as f:  
         return pickle.load(f)
